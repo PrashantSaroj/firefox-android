@@ -105,6 +105,17 @@
     <action
         android:id="@+id/action_global_historyFragment"
         app:destination="@id/historyFragment" />
+    <action
+        android:id="@+id/action_pageSummaryFragment"
+        app:destination="@id/pageSummaryFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right">
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </action>
 
     <action
         android:id="@+id/action_global_downloadsFragment"
@@ -334,6 +345,15 @@
             app:destination="@id/historySearchDialogFragment"
             app:popUpTo="@id/historySearchDialogFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pageSummaryFragment"
+        android:name="org.mozilla.fenix.library.pagesummary.PageSummaryFragment"
+        android:label="@string/page_summary">
+        <argument
+            android:name="url"
+            app:argType="string" />
     </fragment>
 
     <dialog

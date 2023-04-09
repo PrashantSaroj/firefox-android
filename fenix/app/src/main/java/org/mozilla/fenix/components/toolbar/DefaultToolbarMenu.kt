@@ -230,6 +230,14 @@ open class DefaultToolbarMenu(
         onItemTapped.invoke(ToolbarMenu.Item.FindInPage)
     }
 
+    private val pageSummaryItem = BrowserMenuImageText(
+        label = context.getString(R.string.browser_menu_page_summary),
+        imageResource = R.drawable.mozac_ic_openai,
+        iconTintColorResource = primaryTextColor(),
+    ) {
+        onItemTapped.invoke(ToolbarMenu.Item.PageSummary)
+    }
+
     private val desktopSiteItem = BrowserMenuImageSwitch(
         imageResource = R.drawable.ic_desktop,
         label = context.getString(R.string.browser_menu_desktop_site),
@@ -367,6 +375,7 @@ open class DefaultToolbarMenu(
                 BrowserMenuDivider(),
                 bookmarksItem,
                 historyItem,
+                pageSummaryItem,
                 downloadsItem,
                 extensionsItem,
                 syncMenuItem(),

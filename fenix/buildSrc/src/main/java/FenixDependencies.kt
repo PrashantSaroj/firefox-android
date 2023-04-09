@@ -58,6 +58,10 @@ object FenixVersions {
     const val google_play_review_version = "2.0.0"
 
     const val protobuf = "3.21.10" // keep in sync with the version used in AS.
+
+    const val okhttp = "4.9.2"
+    const val gson = "2.10.1"
+    const val jsoup = "1.15.4"
 }
 
 @Suppress("unused")
@@ -165,6 +169,9 @@ object FenixDependencies {
     const val junitApi = "org.junit.jupiter:junit-jupiter-api:${FenixVersions.junit}"
     const val junitParams = "org.junit.jupiter:junit-jupiter-params:${FenixVersions.junit}"
     const val junitEngine = "org.junit.jupiter:junit-jupiter-engine:${FenixVersions.junit}"
+    const val okhttp = "com.squareup.okhttp3:okhttp:${FenixVersions.okhttp}"
+    const val gson = "com.google.code.gson:gson:${FenixVersions.gson}"
+    const val jsoup = "org.jsoup:jsoup:${FenixVersions.jsoup}"
 }
 
 /**

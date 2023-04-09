@@ -484,6 +484,7 @@ dependencies {
 
     implementation FenixDependencies.kotlin_coroutines
     implementation FenixDependencies.kotlin_coroutines_android
+    implementation project(path: ':lib-fetch-okhttp')
     testImplementation FenixDependencies.kotlin_coroutines_test
     implementation FenixDependencies.androidx_appcompat
     implementation FenixDependencies.androidx_constraintlayout
@@ -623,6 +624,9 @@ dependencies {
     implementation FenixDependencies.google_play_review_ktx
 
     implementation FenixDependencies.androidx_profileinstaller
+    implementation FenixDependencies.okhttp
+    implementation FenixDependencies.gson
+    implementation FenixDependencies.jsoup
 
     androidTestImplementation FenixDependencies.uiautomator
     androidTestImplementation "tools.fastlane:screengrab:2.0.0"

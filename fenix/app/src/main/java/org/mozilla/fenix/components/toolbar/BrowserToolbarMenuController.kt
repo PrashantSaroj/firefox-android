@@ -5,6 +5,7 @@
 package org.mozilla.fenix.components.toolbar
 
 import android.content.Intent
+import android.util.Log
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
@@ -302,6 +303,18 @@ class DefaultBrowserToolbarMenuController(
             is ToolbarMenu.Item.FindInPage -> {
                 findInPageLauncher()
             }
+            is ToolbarMenu.Item.PageSummary -> {
+                store.state.selectedTab?.let {
+                    getProperUrl(it)?.let { url ->
+                        browserAnimator.captureEngineViewAndDrawStatically {
+                            navController.nav(
+                                R.id.browserFragment,
+                                BrowserFragmentDirections.actionPageSummaryFragment(url),
+                            )
+                        }
+                    }
+                }
+            }
             is ToolbarMenu.Item.AddonsManager -> browserAnimator.captureEngineViewAndDrawStatically {
                 navController.nav(
                     R.id.browserFragment,
@@ -435,6 +448,8 @@ class DefaultBrowserToolbarMenuController(
                 }
             is ToolbarMenu.Item.FindInPage ->
                 Events.browserMenuAction.record(Events.BrowserMenuActionExtra("find_in_page"))
+            is ToolbarMenu.Item.PageSummary ->
+                Events.browserMenuAction.record(Events.BrowserMenuActionExtra("page_summary"))
             is ToolbarMenu.Item.SaveToCollection ->
                 Events.browserMenuAction.record(Events.BrowserMenuActionExtra("save_to_collection"))
             is ToolbarMenu.Item.AddToTopSites ->
