@@ -92,7 +92,7 @@ private fun PageSummaryUi(
         LoadState.Loading -> FenixLinearProgressIndicator()
         LoadState.Error -> FenixSnackbar.make(
             view = rootView,
-            duration = FenixSnackbar.LENGTH_INDEFINITE,
+            duration = FenixSnackbar.LENGTH_LONG,
             isDisplayedWithBrowserToolbar = false,
         )
             .setText(stringResource(id = R.string.something_went_wrong))
