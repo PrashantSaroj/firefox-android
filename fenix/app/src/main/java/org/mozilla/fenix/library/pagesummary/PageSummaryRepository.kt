@@ -67,6 +67,6 @@ class PageSummaryRepository {
 
     companion object {
         private const val PROMPT =
-            "Ignoring any Javascript or CSS code, give me summary of this webpage: "
+            "Ignoring any Javascript or CSS code, give me detailed summary of this webpage: "
     }
 }
