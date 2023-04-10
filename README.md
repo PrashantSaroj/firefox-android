@@ -1,51 +1,33 @@
+# Adding "Summarize Page" capability to Fenix using gpt-3.5-turbo
 
-This repository hosts the Firefox for Android (Fenix), Focus on Android, and Mozilla Android Components projects.
+## Demo
+https://drive.google.com/file/d/1rnXxLXJRiUS13fVYNtObEup_J6Lcqq76/view?usp=sharing
 
-# Firefox for Android
+## Download/Build apk
+1. Link to download apk - https://1drv.ms/f/s!AgzjizkELD-xl2ayDS6ieygzeXQ8?e=3TeR1B (Github doesn't allow LFS objects in public forks for non-enterprise users)
+2. For building it yourself, clone this repo and put OpenAi api key in `PageSummaryRepository.kt` on line 13
 
-[![Task Status](https://firefox-ci-tc.services.mozilla.com/api/github/v1/repository/mozilla-mobile/firefox-android/main/badge.svg)](https://firefox-ci-tc.services.mozilla.com/api/github/v1/repository/mozilla-mobile/firefox-android/main/latest)
-[![chat.mozilla.org](https://img.shields.io/badge/chat-on%20matrix-51bb9c)](https://chat.mozilla.org/#/room/#fenix:mozilla.org)
+## Approach
+1. Add an option to "Summarize Page" in 3-dots action menu
+2. When user clicks on it, show a fragment with page summary
+3. Add indeterminate linear progress indicator to show loading
+4. Add snackbar for conveying error
+5. Add refresh button for retrying
+6. Add back button with slide-in and out animations to return back to the webpage
 
-_Get the people-first browser that’s backed by a non-profit._
+## Data flow diagram
+![DFD](dfd.jpg)
 
-_It’s a new era in tech. Don’t settle for a browser produced by giant, profit-driven, data-hoarding tech companies. Firefox is the obvious choice for independent, ethical tech that respects your privacy and gives you more ways than ever before to tailor your internet experience exactly the way you want it._
+## HTML parsing
+There are two strategies for html parsing:
+1. Primary: Get the content inside "p" and "h1" tags using `Jsoup` and send those to gpt
+2. Secondary: If the content length parsed using the above strategy was less then minimum threshold then we remove all the html tags and use chunking (describe in next section)
+### Chunking
+GPT apis have limit on number of tokens sent per request. In case, page content is exceding the limit, we divide the page into chunks and pick up non adjacent chunks (so most of the content is included in request).
 
-Fenix (internal codename) is the all-new Firefox for Android browser, based on [GeckoView](https://mozilla.github.io/geckoview/) and [Mozilla Android Components](https://mozac.org/).
 
-<a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox" target="_blank"><img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
+## Limitations
+1. I could not find a way to get the current page content in `GeckoEngine` class. So, we have to fetch the page again via okhttp and then make another network call to gpt apis to get summary. Pages which require additional authentication, will not work in this approach
+2. We parse the html response and send it to gpt. If most of the content was loaded using JS, then summary would not be good
+3. GPT response is slow due to free api key
 
-Please file issues for Fenix (Firefox for Android) in [Bugzilla](https://bugzilla.mozilla.org/enter_bug.cgi?product=Fenix), selecting the corresponding component. 
-
-[Learn more about Firefox for Android](fenix/README.md)
-
-# Firefox Focus for Android
-
-[![Task Status](https://firefox-ci-tc.services.mozilla.com/api/github/v1/repository/mozilla-mobile/firefox-android/main/badge.svg)](https://firefox-ci-tc.services.mozilla.com/api/github/v1/repository/mozilla-mobile/firefox-android/main/latest)
-[![chat.mozilla.org](https://img.shields.io/badge/chat-on%20matrix-51bb9c)](https://chat.mozilla.org/#/room/#focus-android:mozilla.org)
-
-_Browse like no one’s watching. The new Firefox Focus automatically blocks a wide range of online trackers — from the moment you launch it to the second you leave it. Easily erase your history, passwords and cookies, so you won’t get followed by things like unwanted ads._ 
-
-Firefox Focus provides automatic ad blocking and tracking protection on an easy-to-use private browser.
-
-<a href="https://play.google.com/store/apps/details?id=org.mozilla.focus" target="_blank"><img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
-
-* [Google Play: Firefox Focus (Global)](https://play.google.com/store/apps/details?id=org.mozilla.focus)
-* [Google Play: Firefox Klar (Germany, Austria & Switzerland)](https://play.google.com/store/apps/details?id=org.mozilla.klar)
-* [Download APKs](https://github.com/mozilla-mobile/focus-android/releases)
-
-Firefox Focus (Android) issues should now also be filed in [Bugzilla](https://bugzilla.mozilla.org/enter_bug.cgi?product=Focus) under the Focus product.
-
-[Learn more about Focus for Android](focus-android/README.md)
-
-# Android components
-
-[![Task Status](https://firefox-ci-tc.services.mozilla.com/api/github/v1/repository/mozilla-mobile/firefox-android/main/badge.svg)](https://firefox-ci-tc.services.mozilla.com/api/github/v1/repository/mozilla-mobile/firefox-android/main/latest)
-[![chat.mozilla.org](https://img.shields.io/badge/chat-on%20matrix-51bb9c)](https://chat.mozilla.org/#/room/#android-components:mozilla.org)
-
-_A collection of Android libraries to build browsers or browser-like applications._
-
-A fully-featured reference browser implementation based on the components can be found in the [reference-browser repository](https://github.com/mozilla-mobile/reference-browser).
-
-Please file issues for Android Components in the Fenix [Bugzilla](https://bugzilla.mozilla.org/enter_bug.cgi?product=Fenix), selecting the corresponding component. 
-
-[Learn more about Android Components](android-components/README.md)
